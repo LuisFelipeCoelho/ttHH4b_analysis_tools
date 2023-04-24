@@ -1,4 +1,4 @@
-file = "/afs/cern.ch/user/l/lfaldaul/work/ttHH_analysis/ttHH4banalysis/run/sh4b-DAOD_PHYSLITE.32056469._000001.pool.root-test/data-Analysis_SH4B/mc20_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_PHYSLITE.e6337_s3681_r13167_r13146_p5511.root"
+file = "/afs/cern.ch/user/l/lfaldaul/work/ttHH_analysis/ttHH4banalysis/run/tthh4b-DAOD_PHYSLITE.32056469._000001.pool.root-test/data-Analysis_SH4B/mc20_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_PHYSLITE.e6337_s3681_r13167_r13146_p5511.root"
 
 #file_path = "/afs/cern.ch/user/l/lfaldaul/work/ttHH_analysis/ttHH4banalysis/run/ttHH4b-DAOD_PHYSLITE.32056469._EVTNUM.pool.root-test/data-Analysis_SH4B/mc20_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_PHYSLITE.e6337_s3681_r13167_r13146_p5511.root"
 
