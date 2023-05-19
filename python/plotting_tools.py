@@ -47,13 +47,16 @@ def simpleLegend(hist1, nevents, event_name="", sqrt_s='13.6 TeV'):
 	latex.DrawLatex(0.58, 0.85, str(nevents) + " events, #sqrt{s} = {}".format(sqrt_s))
 	#latex.DrawText(0.58, 0.75, "AthGeneration 23.6.0")
 
-def setLegend(acts, orthogonal, right="rightTop"):
+def setLegend(h1, h2, right="rightTop", text_plot=['h1', 'h2', 'Event type', 'Number of events', '']):
+	'''
+	Add legend to a plot with two histograms
+	'''
 	if right=="rightTop":	legend = ROOT.TLegend(0.6,0.65,0.95,0.72)
 	elif right=="leftTop":  legend = ROOT.TLegend(0.2,0.65,0.55,0.72)
 	elif right=="leftBot":  legend = ROOT.TLegend(0.2,0.15,0.55,0.22)
 	elif right=="rightBot": legend = ROOT.TLegend(0.6,0.15,0.95,0.22)
-	legend.AddEntry(acts ,"ACTS reference"+time_default)
-	legend.AddEntry(orthogonal ,"ACTS monitored"+time_orthogonal)
+	legend.AddEntry(h1 , text_plot[0])
+	legend.AddEntry(h2 , text_plot[1])
 	legend.SetTextSize(0.035)
 	legend.SetLineWidth(0)
 	legend.SetFillStyle(0)
@@ -62,21 +65,21 @@ def setLegend(acts, orthogonal, right="rightTop"):
 	latex.SetNDC()
 	latex.SetTextSize(0.035)
 	if right=="rightTop":
-		latex.DrawText(0.61, 0.80, " ITk {} configuration".format(detector))
-		latex.DrawLatex(0.61, 0.85, text_plot)
-		latex.DrawText(0.61, 0.75, nEventTotal)
+		latex.DrawText(0.61, 0.80, text_plot[2])
+		latex.DrawLatex(0.61, 0.85, text_plot[3])
+		latex.DrawText(0.61, 0.75, text_plot[4])
 	elif right=="leftTop":
-		latex.DrawText(0.21, 0.80, " ITk {} configuration".format(detector))
-		latex.DrawLatex(0.21, 0.85, text_plot)
-		latex.DrawText(0.21, 0.75, nEventTotal)	
+		latex.DrawText(0.21, 0.80, text_plot[2])
+		latex.DrawLatex(0.21, 0.85, text_plot[3])
+		latex.DrawText(0.21, 0.75, text_plot[4])	
 	elif right=="leftBot":
-		latex.DrawText(0.21, 0.30, " ITk {} configuration".format(detector))
-		latex.DrawLatex(0.21, 0.35, text_plot)
-		latex.DrawText(0.21, 0.25, nEventTotal)	
+		latex.DrawText(0.21, 0.30, text_plot[2])
+		latex.DrawLatex(0.21, 0.35, text_plot[3])
+		latex.DrawText(0.21, 0.25, text_plot[4])
 	elif right=="rightBot":
-		latex.DrawText(0.61, 0.30, " ITk {} configuration".format(detector))
-		latex.DrawLatex(0.61, 0.35, text_plot)
-		latex.DrawText(0.61, 0.25, nEventTotal)	
+		latex.DrawText(0.61, 0.30, text_plot[2])
+		latex.DrawLatex(0.61, 0.35, text_plot[3])
+		latex.DrawText(0.61, 0.25, text_plot[4])
 	return legend
 
 def setLegend2(h1, name):
@@ -88,11 +91,12 @@ def setLegend2(h1, name):
 	legend2.SetFillStyle(0)
 	legend2.Draw("same")
  
-def plotOptions(h1, h2, y_label, yMin=-1, yMax=-1):
+def plotOptions(h1, h2, y_label, x_label="", yMin=-1, yMax=-1):
 	'''
 	Set plotting configuration
 	'''
 	h1.GetYaxis().SetTitle(y_label)
+	if x_label!="": h1.GetXaxis().SetTitle(x_label)
 	h1.GetYaxis().SetLabelSize(0.);
 	h1.SetLineColor(206)
 	h2.SetLineColor(62)
