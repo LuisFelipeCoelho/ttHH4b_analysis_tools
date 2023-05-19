@@ -92,7 +92,7 @@ for branchName in branch_names:
     hist_name = 'TH1F_'+branchName
     canvas.Clear()
     pt.simplePlot(TH1F_list[hist_name], branchName)
-    pt.simpleLegend(TH1F_list[hist_name], nevents)
+    pt.simpleLegend(TH1F_list[hist_name], nevents, event_name="Physlite ttbar")
     canvas.Print(output_path + "/" + branchName + ".png")
     canvas.Print("my_output.pdf")
 
