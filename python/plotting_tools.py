@@ -3,6 +3,7 @@ Set of root plotting tools
 '''
 
 import ROOT
+import general_tools as gt
 
 ROOT.gROOT.SetStyle("ATLAS")
 
@@ -47,16 +48,19 @@ def simpleLegend(hist1, nevents, event_name="", sqrt_s='13.6 TeV'):
 	latex.DrawLatex(0.58, 0.85, str(nevents) + " events, #sqrt{s} = {}".format(sqrt_s))
 	#latex.DrawText(0.58, 0.75, "AthGeneration 23.6.0")
 
-def setLegend(h1, h2, right="rightTop", text_plot=['h1', 'h2', 'Event type', 'Number of events', '']):
+def setLegend(histList, histLabel, right="rightTop", text_plot=['Event type', 'Number of events', ''], yAdd=0, xAdd=0):
 	'''
 	Add legend to a plot with two histograms
 	'''
-	if right=="rightTop":	legend = ROOT.TLegend(0.8,0.65,0.95,0.72)
-	elif right=="leftTop":  legend = ROOT.TLegend(0.2,0.65,0.55,0.72)
-	elif right=="leftBot":  legend = ROOT.TLegend(0.2,0.15,0.55,0.22)
-	elif right=="rightBot": legend = ROOT.TLegend(0.8,0.15,0.95,0.22)
-	legend.AddEntry(h1 , text_plot[0])
-	legend.AddEntry(h2 , text_plot[1])
+	gt.checkIfList(histList)
+	gt.checkIfList(histLabel)
+	gt.checkSameLen(histList, histLabel)
+	if right=="rightTop":	legend = ROOT.TLegend(0.8+xAdd,0.65+yAdd,0.95+xAdd,0.72+yAdd)
+	elif right=="leftTop":  legend = ROOT.TLegend(0.2+xAdd,0.65+yAdd,0.55+xAdd,0.72+yAdd)
+	elif right=="leftBot":  legend = ROOT.TLegend(0.2+xAdd,0.15+yAdd,0.55+xAdd,0.22+yAdd)
+	elif right=="rightBot": legend = ROOT.TLegend(0.8+xAdd,0.15+yAdd,0.95+xAdd,0.22+yAdd)
+	for hist_i, hist in enumerate(histList):
+		legend.AddEntry(hist , histLabel[hist_i])
 	legend.SetTextSize(0.035)
 	legend.SetLineWidth(0)
 	legend.SetFillStyle(0)
@@ -65,21 +69,21 @@ def setLegend(h1, h2, right="rightTop", text_plot=['h1', 'h2', 'Event type', 'Nu
 	latex.SetNDC()
 	latex.SetTextSize(0.035)
 	if right=="rightTop":
-		latex.DrawText(0.81, 0.80, text_plot[2])
-		latex.DrawLatex(0.81, 0.85, text_plot[3])
-		latex.DrawText(0.81, 0.75, text_plot[4])
+		latex.DrawText(0.81+xAdd, 0.80+yAdd, text_plot[0])
+		latex.DrawLatex(0.81+xAdd, 0.85+yAdd, text_plot[1])
+		latex.DrawText(0.81+xAdd, 0.75+yAdd, text_plot[2])
 	elif right=="leftTop":
-		latex.DrawText(0.21, 0.80, text_plot[2])
-		latex.DrawLatex(0.21, 0.85, text_plot[3])
-		latex.DrawText(0.21, 0.75, text_plot[4])	
+		latex.DrawText(0.21+xAdd, 0.80+yAdd, text_plot[0])
+		latex.DrawLatex(0.21+xAdd, 0.85+yAdd, text_plot[1])
+		latex.DrawText(0.21+xAdd, 0.75+yAdd, text_plot[2])	
 	elif right=="leftBot":
-		latex.DrawText(0.21, 0.30, text_plot[2])
-		latex.DrawLatex(0.21, 0.35, text_plot[3])
-		latex.DrawText(0.21, 0.25, text_plot[4])
+		latex.DrawText(0.21+xAdd, 0.30+yAdd, text_plot[0])
+		latex.DrawLatex(0.21+xAdd, 0.35+yAdd, text_plot[1])
+		latex.DrawText(0.21+xAdd, 0.25+yAdd, text_plot[2])
 	elif right=="rightBot":
-		latex.DrawText(0.81, 0.30, text_plot[2])
-		latex.DrawLatex(0.81, 0.35, text_plot[3])
-		latex.DrawText(0.81, 0.25, text_plot[4])
+		latex.DrawText(0.81+xAdd, 0.30+yAdd, text_plot[0])
+		latex.DrawLatex(0.81+xAdd, 0.35+yAdd, text_plot[1])
+		latex.DrawText(0.81+xAdd, 0.25+yAdd, text_plot[2])
 	return legend
 
 def setLegend2(h1, name):
@@ -91,39 +95,41 @@ def setLegend2(h1, name):
 	legend2.SetFillStyle(0)
 	legend2.Draw("same")
 
-def plotOptions(h1, h2, y_label, x_label="",  yMin=-1, yMax=-1, xMin=-1, xMax=-1):
+def plotOptions(histList, y_label, x_label="",  yMin=-1, yMax=-1, xMin=-1, xMax=-1):
 	'''
 	Meant to be used in a canvas with only one pad
 	Set plotting configuration for the histograms
 	'''
-	h1.GetYaxis().SetTitle(y_label)
-	h1.GetXaxis().SetTitle(x_label)
-	h1.SetLineColor(46)
-	h2.SetLineColor(42)
-	h1.SetLineWidth(2)
-	h1.SetMarkerStyle(0);
-	h2.SetMarkerStyle(0);
-	h1.GetYaxis().SetTitleSize(20)
-	h1.GetYaxis().SetTitleFont(43)
-	h1.GetYaxis().SetTitleOffset(2)
-	h1.GetYaxis().SetLabelFont(43)
-	h1.GetYaxis().SetLabelSize(15)
-	h1.GetXaxis().SetTitleSize(20)
-	h1.GetXaxis().SetTitleFont(43)
-	h1.GetXaxis().SetTitleOffset(1.2)
-	h1.GetXaxis().SetLabelFont(43)
-	h1.GetXaxis().SetLabelSize(15)
+	gt.checkIfList(histList)
+	histList[0].GetYaxis().SetTitle(y_label)
+	histList[0].GetXaxis().SetTitle(x_label)
+	yMaxAuto = 0
+	for i, hist in enumerate(histList):
+		hist.SetLineColor(i+1)
+		hist.SetMarkerStyle(0)
+		hist.SetLineWidth(2)
+		hist.Scale(1/hist.Integral())
+		yMaxAuto = max(hist.GetMaximum(), yMaxAuto)
+	histList[0].GetYaxis().SetTitleSize(20)
+	histList[0].GetYaxis().SetTitleFont(43)
+	histList[0].GetYaxis().SetTitleOffset(2)
+	histList[0].GetYaxis().SetLabelFont(43)
+	histList[0].GetYaxis().SetLabelSize(15)
+	histList[0].GetXaxis().SetTitleSize(20)
+	histList[0].GetXaxis().SetTitleFont(43)
+	histList[0].GetXaxis().SetTitleOffset(1.2)
+	histList[0].GetXaxis().SetLabelFont(43)
+	histList[0].GetXaxis().SetLabelSize(15)
+	for hist in histList:
+		hist.GetYaxis().SetRangeUser(0,yMaxAuto*1.25)
 	if xMax != -1:
-		#h1.SetBins(bins,xMin,xMax)
-		#h2.SetBins(bins,xMin,xMax)
-		h1.GetXaxis().SetRangeUser(xMin,xMax)
-		h2.GetXaxis().SetRangeUser(xMin,xMax)
+		for hist in histList:
+			hist.GetXaxis().SetRangeUser(xMin,xMax)
 	if yMax != -1:
-		h1.GetYaxis().SetRangeUser(yMin,yMax)
-		h2.GetYaxis().SetRangeUser(yMin,yMax)
-	h1.SetStats(0)
-	h2.SetLineWidth(2)
-	return h1, h2
+		for hist in histList:
+			hist.GetYaxis().SetRangeUser(yMin,yMax)
+	histList[0].SetStats(0)
+	return histList[0], histList[1]
  
 def plotOptionsTop(h1, h2, y_label, yMin=-1, yMax=-1):
 	'''
