@@ -4,16 +4,19 @@ This script plots all the branches from several input files from ttHH4banalysis
 
 ### config ####
 
-number_of_files = 2	# number of files to run
+number_of_files = 5	# number of files to run
 cut_flow = False	# if true plots the cut flow from data-Analysis_EvtSelection instead of variables from data-Analysis_TTHH4B 
 
 ###############
 
 
 path = "/afs/cern.ch/user/l/lfaldaul/work/ttHH_analysis/ttHH4banalysis/run/"
+#path = "/eos/home-l/lfaldaul/samples/ttHH_analysis/NTRUPLES/ttbar/user.lfaldaul.TTHH4b.410470.e6337_s3681_r13167_r13146_p5631.list_of_files._Analysis_TTHH4B.root/" 
 if cut_flow: postfix = "EvtSelection"
 else: postfix = "TTHH4B"
 files = [path+"tthh4b-DAOD_PHYSLITE.32056469._{0:06}.pool.root-test".format(n_file+1)+"/data-Analysis_{}/mc20_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_PHYSLITE.e6337_s3681_r13167_r13146_p5511.root".format(postfix) for n_file in range(number_of_files)]
+#files = [path+"user.lfaldaul.33563101._{0:06}.Analysis".format(n_file+1)+"_{}.root".format(postfix) for n_file in range(number_of_files)]
+
 
 tree_name = "MiniTree_NOSYS"
 output_path = "../figs/plots_hh4b"
